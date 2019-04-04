@@ -2,8 +2,8 @@
 
 var google = require('googleapis');
 
-var pathToClientSecret = '/path/to/client_secrets.json';
-var pathToDiscoveryDoc = '/path/to/discoveryDoc.json';
+var pathToClientSecret = 'client_secrets.json';
+var pathToDiscoveryDoc = 'config/discoveryDoc.json';
 
 
 // Step 1: Generate an oauth2client
