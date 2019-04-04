@@ -1,0 +1,4 @@
+{
+  "oath2": "signedintoken",
+  "refresh": "refreshtoken"
+}
