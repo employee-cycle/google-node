@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/employee-cycle/google-node/issues"
   },
-  "homepage": "https://github.com/employee-cycle/google-node#readme"
+  "homepage": "https://github.com/employee-cycle/google-node#readme",
+  "dependencies": {
+    "googleapis": "^39.2.0"
+  }
 }
