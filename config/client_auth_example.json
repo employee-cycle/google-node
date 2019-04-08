@@ -1,4 +1,4 @@
 {
-  "oath2": "signedintoken",
+  "oauth2": "signedintoken",
   "refresh": "refreshtoken"
 }
