@@ -64,12 +64,8 @@ exports.printTokenFromCode = (oauth2client, code) => {
  * @param {string} refreshToken - OAuth2 refresh token
  */
 exports.callHireAPI = (pathToDiscoveryDoc, oauth2client, refreshToken) => {
-  google.discoverAPI(pathToDiscoveryDoc, function (err, hire) {
-    if (err) {
-      console.error('Failed to generate hire client!');
-      throw err;
-    }
-
+  google.discoverAPI(pathToDiscoveryDoc)
+  .then((hire) => {
     oauth2client.setCredentials({
       refresh_token: refreshToken,
     });
@@ -82,7 +78,10 @@ exports.callHireAPI = (pathToDiscoveryDoc, oauth2client, refreshToken) => {
 
         console.log('Candidates:', result);
     });
-  });
+  })
+	.catch((error) => {
+		console.error('Failed to generate hire client!', error);
+	});
 }
 
 //Compressed Helper functions

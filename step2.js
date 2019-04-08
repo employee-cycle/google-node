@@ -7,6 +7,6 @@ var auth = require('./config/client_auth.json');
 
 var pathToClientSecret = './config/client_secrets.json';
 
-var oauth2client = generateOAuth2client(pathToClientSecret);
+var oauth2client = helpers.generateOAuth2client(pathToClientSecret);
 
 helpers.printTokenFromCode(oauth2client, auth.oath);
