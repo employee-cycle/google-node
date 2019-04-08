@@ -1,3 +1,4 @@
 node_modules/
 client_secrets.json
 client_auth.json
+.DS_Store
