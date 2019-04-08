@@ -1,3 +1,9 @@
+// Code is meant to be run step by step in a NodeJS REPL environment
+
+var google = require('googleapis');
+
+// ------------------- Helper functions -------------------
+
 /**
  * Creates an oauth2client out of a cloud console client secret file.
  *
@@ -16,6 +22,24 @@ exports.generateOAuth2client = (pathToClientSecret) => {
     clientSecret.installed.client_secret,
     'urn:ietf:wg:oauth:2.0:oob'
   );
+}
+
+/**
+ * Creates an oauth2client out of a cloud console client secret file.
+ *
+ * @param {google.auth.OAuth2} oauth2client
+ */
+exports.printCodeURL = (oauth2client) => {
+  var scopes = ['https://www.googleapis.com/auth/hire.candidate.readonly'];
+
+  var url = oauth2client.generateAuthUrl({
+    // 'online' (default) or 'offline' (gets refresh_token)
+    access_type: 'offline',
+    // If you only need one scope you can pass it as a string
+    scope: scopes
+  });
+
+  console.log('Follow this url to get an OAuth2 code:\n\n' + url);
 }
 
 /**
@@ -47,22 +71,17 @@ exports.callHireAPI = (pathToDiscoveryDoc, oauth2client, refreshToken) => {
           console.log("above google call");
 
   console.log(pathToDiscoveryDoc)
-
-  google.discoverAPI(pathToDiscoveryDoc, function (err, hire) {
+  google.discoverAPI(pathToDiscoveryDoc)
+  .then((hire) => {
 
     console.log("inside google");
-    if (err) {
-      console.error('Failed to generate hire client!');
-      throw err;
-    }
-
     oauth2client.setCredentials({
       refresh_token: refreshToken,
     });
 
     console.log("credentials are set");
 
-    hire.candidates.list(params , function (err, result) {
+    hire.candidates.list({auth: oauth2client} , function (err, result) {
 
         console.log("in the list");
         if (err) {
@@ -72,7 +91,10 @@ exports.callHireAPI = (pathToDiscoveryDoc, oauth2client, refreshToken) => {
 
         console.log('Candidates:', result);
     });
-  });
+  })
+	.catch((error) => {
+		console.error('Failed to generate hire client!', error);
+	});
 }
 
 /**
@@ -95,4 +117,3 @@ exports.printCodeURL = (oauth2client) => {
 
 //Compressed Helper functions
 function generateOAuth2client(pathToClientSecret){var clientSecret=require(pathToClientSecret);return new google.auth.OAuth2(clientSecret.installed.client_id,clientSecret.installed.client_secret,'urn:ietf:wg:oauth:2.0:oob')}function printCodeURL(oauth2client){var scopes=['https://www.googleapis.com/auth/hire.candidate.readonly'];var url=oauth2client.generateAuthUrl({access_type:'offline',scope:scopes});console.log('Follow this url to get an OAuth2 code:\n\n'+url)}function printTokenFromCode(oauth2client,code){oauth2client.getToken(code,function(err,tokens){if(err){console.log('Got error:',err)}else{console.log('Got tokens:',tokens);console.log('Specifically the refresh token is:',tokens.refresh_token)}})}function callHireAPI(pathToDiscoveryDoc,oauth2client,refreshToken){google.discoverAPI(pathToDiscoveryDoc,function(err,hire){if(err){console.error('Failed to generate hire client!');throw err;}oauth2client.setCredentials({refresh_token:refreshToken,});hire.candidates.list({auth:oauth2client},function(err,result){if(err){console.error('Failed to retrieve candidates!');throw err;}console.log('Candidates:',result)})})}
-
