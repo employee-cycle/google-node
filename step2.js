@@ -1,5 +1,5 @@
 /*
- * Generate Refrest Token from Auth Token
+ * Generate OAuth2 Code (valid ~30 seconds)
  */
 var google = require('googleapis');
 var helpers = require('./google-helpers');

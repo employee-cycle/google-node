@@ -1,5 +1,5 @@
 /*
- * Generate Sign in URL from client_secrets.json
+ * Generate oauth2client Sign in URL from client_secrets.json
  */
 
 var google = require('googleapis');

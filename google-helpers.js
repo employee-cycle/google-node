@@ -11,7 +11,7 @@ var google = require('googleapis');
  * @return {google.auth.OAuth2}
  */
 
-
+// Bug 1: Fixed by Googling {}
 var {google} = require('googleapis');
 
 exports.generateOAuth2client = (pathToClientSecret) => {
@@ -71,6 +71,10 @@ exports.callHireAPI = (pathToDiscoveryDoc, oauth2client, refreshToken) => {
           console.log("above google call");
 
   console.log(pathToDiscoveryDoc)
+
+  // Bug 2: Fixed by Jason (promises)
+
+
   google.discoverAPI(pathToDiscoveryDoc)
   .then((hire) => {
 
@@ -81,9 +85,13 @@ exports.callHireAPI = (pathToDiscoveryDoc, oauth2client, refreshToken) => {
 
     console.log("credentials are set");
 
-    hire.candidates.list({auth: oauth2client} , function (err, result) {
+    var params = {
+      auth: oauth2client,
+      parent: 'tenants/my_tenant',
+    };
 
-        console.log("in the list");
+    hire.tenants.candidates.get(params , function (err, result) {
+        console.log(err);
         if (err) {
           console.error('Failed to retrieve candidates!');
           throw err;
@@ -96,6 +104,7 @@ exports.callHireAPI = (pathToDiscoveryDoc, oauth2client, refreshToken) => {
 		console.error('Failed to generate hire client!', error);
 	});
 }
+
 
 /**
  * Creates an oauth2client out of a cloud console client secret file.
