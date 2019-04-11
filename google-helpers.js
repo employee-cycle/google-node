@@ -90,7 +90,7 @@ exports.callHireAPI = (pathToDiscoveryDoc, oauth2client, refreshToken) => {
       parent: 'tenants/my_tenant',
     };
 
-    hire.tenants.candidates.get(params , function (err, result) {
+    hire.tenants.candidates.list(params , function (err, result) {
         console.log(err);
         if (err) {
           console.error('Failed to retrieve candidates!');
